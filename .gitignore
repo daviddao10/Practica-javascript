@@ -1,1 +1,2 @@
-.vscode
+# Ignora todos los archivos de texto
+*.vscode
