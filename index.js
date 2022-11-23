@@ -3,12 +3,15 @@ class Ligas {
     constructor(name, teams) {
         this.name = name
         this.teams = teams
+        this.grupTeams=[]
         this.arrayteams = []
         this.teamsFourFinal = []
         this.loser = []
         this.win=[]
     }
     iniciar() {
+        console.log("comienzan las fases eliminatorias del torneo")
+        console.log("se siente la emocion")
         this.grupos()
         console.log('===== CUARTOS DE FINAL =====')
         this.cuartosDeFinal()
@@ -42,10 +45,18 @@ class Ligas {
         console.log('Grupo B: ' + grupo2[0] + ', ' + grupo2[1] + '.')
         console.log('Grupo C: ' + grupo3[0] + ', ' + grupo3[1] + '.')
         console.log('Grupo D: ' + grupo4[0] + ', ' + grupo4[1] + '.')
+
         
-        
+
         teamsAletorios(this.arrayteams)
+        
+        this.grupTeams.push(...this.arrayteams)
+
+     
+
+        
         this.teamsFourFinal.push([this.arrayteams[0][0], this.arrayteams[2][0]],[this.arrayteams[0][1], this.arrayteams[2][1]],[this.arrayteams[1][0], this.arrayteams[3][0]],[this.arrayteams[1][1], this.arrayteams[3][1]],)
+        
     }
 
     cuartosDeFinal() {
@@ -74,8 +85,10 @@ class Ligas {
         }
           
     }
+
+
     semiFinal() {
-        let a,b,d,e,ganador1,ganador2
+        let a,b,d,e,ganador1,ganador2, conditional
         let c = function () {
             return Math.floor(Math.random() * 10);
         }
@@ -84,34 +97,50 @@ class Ligas {
         d = c()
         e = c()
 
+        conditional = this.theMacthwhitTeam()
+
         if (a === b ) { 
                 a++
         }
+
         if (d === e) {
             e++
         }
-        if (a > b) {
-            ganador1 = this.arrayteams[0]
-            this.loser.push(this.arrayteams[1])
-            this.win.push(this.arrayteams[0])
-        } else if (b>a){
-            
-            ganador1 = this.arrayteams[1]
-            this.loser.push(this.arrayteams[0])
-            this.win.push(this.arrayteams[1])
-        }
-        if (d > e) {
-            ganador2 = this.arrayteams[2]
-            this.loser.push(this.arrayteams[3])
-            this.win.push(this.arrayteams[2])
-        } else if (e> d){
-            ganador2 = this.arrayteams[3]
-            this.loser.push(this.arrayteams[2])
-            this.win.push(this.arrayteams[3])
-        }
+
+        if (conditional){
+
+            if (a > b) {
+                ganador1=this.ifTeamsEquals(0,1)
+            } else if (b>a){
+                ganador1=this.ifTeamsEquals(1,0,ganador2)
+            }
+            if (d > e) {
+                ganador2=this.ifTeamsEquals(2,3)
+            } else if (e> d){
+                ganador2=this.ifTeamsEquals(3,2,ganador2)
+            }
         console.log(`${this.arrayteams[0]} ${a} - ${b} ${this.arrayteams[1]} => ${ganador1}`)
         console.log(`${this.arrayteams[2]} ${d} - ${e} ${this.arrayteams[3]} => ${ganador2}`)
+
+        }else{
+            if (a > b) {
+                ganador1= this.ifTeamsEquals(0,2)
+            } else if (b>a){
+                ganador1=this.ifTeamsEquals(2,0)
+            }
+            if (d > e) {
+                ganador2=this.ifTeamsEquals(1,3)
+            } else if (e> d){
+                ganador2=this.ifTeamsEquals(3,1)
+            }
+            console.log(`${this.arrayteams[0]} ${a} - ${b} ${this.arrayteams[2]} => ${ganador1}`)
+             console.log(`${this.arrayteams[1]} ${d} - ${e} ${this.arrayteams[3]} => ${ganador2}`)
+        }
+
+        
     }
+
+
     final() {
         let four, tree, two, one, a, b, d, e
         let c = function () {
@@ -154,8 +183,29 @@ class Ligas {
         console.log('===============================================')
 
     }
+
+    ifTeamsEquals(numerArry1,numerArry2){
+        let ganador
+        ganador = this.arrayteams[numerArry1]
+        this.loser.push(this.arrayteams[numerArry2])
+        this.win.push(this.arrayteams[numerArry1])
+        return ganador
+    }
+
+    theMacthwhitTeam(){
+
+        for (const [first,second] of this.grupTeams) {
+            for (let index = 0; index < 4; index= index+2 ) {
+                
+                if (first=== this.arrayteams[index] && second=== this.arrayteams[index+1]) {
+                 return  false
+                }   
+            }
+        }
+       return true
+    }
 }
 
-let hola = new Ligas('ligas',['Noruega', 'Inglaterra', 'España', 'Alemania', 'Países Bajos', 'Suiza', 'Francia', 'Islandia'])
+let Campeonato = new Ligas('ligas',['Noruega', 'Inglaterra', 'España', 'Alemania', 'Países Bajos', 'Suiza', 'Francia', 'Islandia'])
 
-hola.iniciar()
+Campeonato.iniciar()
